@@ -1,0 +1,4 @@
+﻿  tree.cpp
+c:\users\deep\documents\code\tree\tree\tree.cpp(12): warning C4091: 'typedef ': ignored on left of 'Node' when no variable is declared
+  tree.vcxproj -> C:\Users\deep\Documents\code\tree\Debug\tree.exe
+  tree.vcxproj -> C:\Users\deep\Documents\code\tree\Debug\tree.pdb (Full PDB)
