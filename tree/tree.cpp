@@ -11,6 +11,7 @@ typedef struct Node
 	struct Node *Right;
 };
 int FindHeight(Node *root);
+int findLeaves(Node *root);
 using namespace std;
 
 int main()
@@ -33,9 +34,10 @@ int main()
 	root->Left = n2;
 	root->Right = n3;
 	n2->Left = n4;
+	n2->Right = n5;
 	n4->Left = n5;
-	cout<<"Height of the tree is"<<FindHeight(root);
-
+	cout<<"Height of the tree is"<<FindHeight(root)<<endl;
+	cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
 	getchar();
     return 0;
 }
@@ -55,4 +57,29 @@ int FindHeight(Node *root)
 		return(hl >= hr ? hl : hr);
 	}
 	
+}
+
+int findLeaves(Node *root)
+{
+	int c = 0;
+	if (root == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		if (root->Left == NULL && root->Right == NULL)
+		{
+			c += 1;
+			//c = 1 + findLeaves(root);
+		}
+		else
+		{
+			c=c+findLeaves(root->Left);
+			c=c+findLeaves(root->Right);
+		}
+		
+		return c;
+	}
+
 }
