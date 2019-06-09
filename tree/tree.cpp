@@ -16,9 +16,37 @@ int findLeaves(Node *root);
 Node * LCA(Node * root, int n1, int n2);
 //For Binary Search Tree
 Node * LCABST(Node * root, int n1, int n2);
+bool identical(Node *root1, Node *root2);
+Node * createTree();
 using namespace std;
 
 int main()
+{
+	Node *root,*root2;
+	root = createTree();
+	root2 = createTree();
+
+	cout<<"Height of the tree is"<<FindHeight(root)<<endl;
+	cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
+
+	int num1 = 3, num2 = 2;
+	//Node *lcaofnode=LCA(root, num1, num2);
+	//cout << "Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
+
+	Node *lcaofnode = LCABST(root, num1, num2);
+	cout << "LCABST: Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data<<endl;
+	if (identical(root, root2))
+	{
+		cout << "Trees are identical" << endl;
+	}
+	else
+	{
+		cout << "Sorry! Trees are not identical" << endl;
+	}
+	getchar();
+    return 0;
+}
+Node * createTree()
 {
 	Node *root;
 	Node *n1, *n2, *n3, *n4, *n5;
@@ -40,20 +68,8 @@ int main()
 	root->Right = n5;
 	n3->Left = n1;
 	n3->Right = n2;
-
-	cout<<"Height of the tree is"<<FindHeight(root)<<endl;
-	cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
-
-	int num1 = 3, num2 = 2;
-	//Node *lcaofnode=LCA(root, num1, num2);
-	//cout << "Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
-
-	Node *lcaofnode = LCABST(root, num1, num2);
-	cout << "LCABST: Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
-	getchar();
-    return 0;
+	return root;
 }
-
 int FindHeight(Node *root)
 {
 	int hl = 0;
@@ -147,4 +163,27 @@ Node * LCABST(Node * root, int n1, int n2)
 		return rn;
 	}
 	return root;
+}
+
+//identical trees Recursive
+bool identical(Node *root1, Node *root2)
+{
+	if (root1 == NULL && root2 == NULL)
+	{
+		return true;
+	}
+	if (root1 == NULL || root2 == NULL)
+	{
+		return false;
+	}
+	if (root1->m_data != root2->m_data)
+	{
+		return false;
+	}
+	if (identical(root1->Left, root1->Left) &&
+		identical(root1->Right, root2->Right))
+	{
+		return true;
+	}
+	return true;
 }
