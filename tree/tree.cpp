@@ -12,6 +12,10 @@ typedef struct Node
 };
 int FindHeight(Node *root);
 int findLeaves(Node *root);
+//For Binary Tree
+Node * LCA(Node * root, int n1, int n2);
+//For Binary Search Tree
+Node * LCABST(Node * root, int n1, int n2);
 using namespace std;
 
 int main()
@@ -30,14 +34,22 @@ int main()
 	n4->m_data = 4;
 	n5->m_data = 5;
 
-	root = n1;
-	root->Left = n2;
-	root->Right = n3;
-	n2->Left = n4;
-	n2->Right = n5;
-	n4->Left = n5;
+	//tree is root->N4->leftN3 root->N4->right n5 n3->left=n1 n3 ->right=n2
+	root = n4;
+	root->Left = n3;
+	root->Right = n5;
+	n3->Left = n1;
+	n3->Right = n2;
+
 	cout<<"Height of the tree is"<<FindHeight(root)<<endl;
 	cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
+
+	int num1 = 3, num2 = 2;
+	//Node *lcaofnode=LCA(root, num1, num2);
+	//cout << "Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
+
+	Node *lcaofnode = LCABST(root, num1, num2);
+	cout << "LCABST: Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
 	getchar();
     return 0;
 }
@@ -82,4 +94,57 @@ int findLeaves(Node *root)
 		return c;
 	}
 
+}
+
+Node * LCA(Node * root,int n1,int n2)//For Binary Tree
+{
+	if (root == NULL)
+	{
+		return NULL;
+	}
+	if (root->m_data == n1 || root->m_data == n2)
+	{
+		return root;
+	}
+	
+	
+		Node *ln = NULL, *rn = NULL;
+		ln = LCA(root->Left, n1, n2);
+		rn = LCA(root->Right, n1, n2);
+		if (ln != NULL && rn != NULL)
+		{
+			return root;
+		}
+		if (ln == NULL && rn == NULL)
+		{
+			return NULL;
+		}
+		return ln != NULL ? ln : rn;
+
+	
+}
+
+Node * LCABST(Node * root, int n1, int n2)
+{
+	if (root == NULL)
+	{
+		return root;
+	}
+	if (root->m_data == n1 || root->m_data == n2)
+	{
+		return root;
+	}
+	Node *ln = NULL, *rn = NULL;
+	
+	if (root->m_data > n1 && root->m_data >n2)
+	{
+		ln = LCABST(root->Left, n1, n2);
+		return ln;
+	}
+	if (root->m_data < n1 && root->m_data<n2)
+	{
+		rn = LCABST(root->Right, n1, n2);
+		return rn;
+	}
+	return root;
 }
