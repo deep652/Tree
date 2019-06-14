@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include<iostream>
+#include<algorithm>
+#include<queue>
 
 typedef struct Node
 {
@@ -17,6 +19,17 @@ Node * LCA(Node * root, int n1, int n2);
 //For Binary Search Tree
 Node * LCABST(Node * root, int n1, int n2);
 bool identical(Node *root1, Node *root2);
+
+//https://www.youtube.com/watch?v=ey7DYc9OANo
+int diameter(Node *root);
+
+void leftView(Node *root);
+
+//https://www.youtube.com/watch?v=NjdOhYKjFrU
+void levelOrderTraversal(Node *root);
+
+void levelOrderTraversal1(Node *root);
+
 Node * createTree();
 using namespace std;
 
@@ -43,33 +56,137 @@ int main()
 	{
 		cout << "Sorry! Trees are not identical" << endl;
 	}
+
+	int d=diameter(root);
+	cout << "Diameter of the tree is: " << d << endl;
+	
+	cout << "Level order traversal of the tree is :" << endl;
+	levelOrderTraversal1(root);
+	/*cout << "Left view of the tree:" << endl;
+	leftView(root);*/
+
+
+
 	getchar();
     return 0;
+}
+
+void levelOrderTraversal(Node *root)
+{
+	Node *d;
+	queue <Node*> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		d = q.front();
+		q.pop();
+		//q.push(NULL); need to handle
+		if (d == NULL)
+		{
+			continue;
+		}
+		cout << d->m_data << "\t";
+		q.push(d->Left);
+		q.push(d->Right);
+	}
+}
+void levelOrderTraversal1(Node *root)
+{
+	Node *d;
+	queue <Node*> q;
+	q.push(root);
+	q.push(NULL);
+	while (!q.empty())
+	{
+		d = q.front();
+		q.pop();
+		if (d == NULL && q.front() == NULL)
+		{
+			break;
+		}
+		if (d == NULL)
+		{
+			cout << endl;
+			q.push(NULL);
+
+		}
+		//q.push(NULL);// need to handle
+		if(d)
+		cout << d->m_data << "\t";
+
+		if(d && d->Left)
+		q.push(d->Left);
+
+		if(d && d->Right)
+		q.push(d->Right);
+		
+	}
+}
+void leftView(Node *root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	cout << root->m_data<<"\t";
+	leftView(root->Left);
+	
+}
+
+int diameter(Node *root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	int lheight = FindHeight(root->Left);
+	int rheight = FindHeight(root->Right);
+	int ldiameter = diameter(root->Left);
+	int rdiameter = diameter(root->Right);
+	int d = max((lheight + rheight + 1), max(ldiameter, rdiameter));
+		return d;
 }
 Node * createTree()
 {
 	Node *root;
-	Node *n1, *n2, *n3, *n4, *n5;
+	Node *n1, *n2, *n3, *n4, *n5,*n6,*n7,*n8;
 	n1 = new Node();
 	n2 = new Node();
 	n3 = new Node();
 	n4 = new Node();
 	n5 = new Node();
-
+	n6 = new Node();
+	n7 = new Node();
+	n8 = new Node();
 	n1->m_data = 1;
 	n2->m_data = 2;
 	n3->m_data = 3;
 	n4->m_data = 4;
 	n5->m_data = 5;
+	n6->m_data = 6;
+	n7->m_data = 7;
+	n8->m_data = 8;
 
-	//tree is root->N4->leftN3 root->N4->right n5 n3->left=n1 n3 ->right=n2
-	root = n4;
-	root->Left = n3;
-	root->Right = n5;
-	n3->Left = n1;
-	n3->Right = n2;
+	////tree is root->N4->leftN3 root->N4->right n5 n3->left=n1 n3 ->right=n2
+	//root = n4;
+	//root->Left = n3;
+	//root->Right = n5;
+	//n3->Left = n1;
+	//n3->Right = n2;
+	//return root;
+
+	n1->Left = n2;
+	n1->Right = n3;
+	root = n1;
+	n2->Left = n4;
+	n2->Right = n5;
+	n4->Left = n7;
+	n7->Left = n8;
+	n5->Left = n6;
 	return root;
 }
+
+
 int FindHeight(Node *root)
 {
 	int hl = 0;
