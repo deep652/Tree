@@ -30,6 +30,19 @@ void levelOrderTraversal(Node *root);
 
 void levelOrderTraversal1(Node *root);
 
+void levelOrderTraversalRecursive(Node *root);
+
+void printLeaves(Node *root);
+
+void printLevels(Node *root, int height);
+
+//https://www.geeksforgeeks.org/print-right-view-binary-tree-2/
+void printLeftview(Node *root, int level, int *max);
+void leftViewRec(Node *root);
+
+void printRightview(Node *root, int level, int *max);
+void RightViewRec(Node *root);
+
 Node * createTree();
 using namespace std;
 
@@ -37,38 +50,102 @@ int main()
 {
 	Node *root,*root2;
 	root = createTree();
-	root2 = createTree();
+	//root2 = createTree();
+	//cout<<"\n\n";
+	//cout<<"Height of the tree is"<<FindHeight(root)<<endl;
+	//cout<<"\n\n";
+	//cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
 
-	cout<<"Height of the tree is"<<FindHeight(root)<<endl;
-	cout << "Number of Leaves in the tree is: " << findLeaves(root) << endl;
-
-	int num1 = 3, num2 = 2;
-	//Node *lcaofnode=LCA(root, num1, num2);
-	//cout << "Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
-
-	Node *lcaofnode = LCABST(root, num1, num2);
-	cout << "LCABST: Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data<<endl;
-	if (identical(root, root2))
-	{
-		cout << "Trees are identical" << endl;
-	}
-	else
-	{
-		cout << "Sorry! Trees are not identical" << endl;
-	}
-
-	int d=diameter(root);
-	cout << "Diameter of the tree is: " << d << endl;
-	
-	cout << "Level order traversal of the tree is :" << endl;
+	//int num1 = 3, num2 = 2;
+	////Node *lcaofnode=LCA(root, num1, num2);
+	////cout << "Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data;
+	//cout<<"\n\n";
+	//Node *lcaofnode = LCABST(root, num1, num2);
+	//cout << "LCABST: Lowest common ancestor of " << num1 << " and " << num2 << " is: " << lcaofnode->m_data<<endl;
+	//if (identical(root, root2))
+	//{
+	//	cout << "Trees are identical" << endl;
+	//}
+	//else
+	//{
+	//	cout << "Sorry! Trees are not identical" << endl;
+	//}
+	//cout<<"\n\n";
+	//int d=diameter(root);
+	//cout << "Diameter of the tree is: " << d << endl;
+	//cout<<"\n\n";
+	cout << "Level order traversal of the tree is [Ilterative approach] each level in new line:" << endl;
 	levelOrderTraversal1(root);
-	/*cout << "Left view of the tree:" << endl;
-	leftView(root);*/
-
-
-
+	/*cout<<"\n\n";
+	cout << "Level order traversal of the tree is [Recursive approach] each level in the same line:" << endl;
+	levelOrderTraversal(root);
+	cout<<"\n\n";
+	cout << "Level order traversal of the tree is [Recursive approach 1] each level in the same line:" << endl;
+	levelOrderTraversalRecursive(root);
+	cout<<"\n\n";*/
+	cout << "Leaves of the tree: " << endl;
+	printLeaves(root);
+	cout<<"\n\n";
+	cout << "nodes at 3rd level of the tree: ";
+	printLevels(root,3);
+	cout<<"\n\n";
+	cout << "Left view of the tree:" << endl;
+	cout<<"\n\n";
+	leftView(root);
+	cout<<"\n\n";
+	cout << "Left view of the tree [recursive]:" << endl;
+	leftViewRec(root);
+	cout << "\n\n";
+	cout << "Right view of the tree recursive]:" << endl;
+	RightViewRec(root);
+	cout << "\n\n";
 	getchar();
     return 0;
+}
+
+void levelOrderTraversalRecursive(Node *root)
+{
+	Node *p;
+	queue <Node *> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		p = q.front();
+		q.pop();
+		if (p == NULL)
+		{
+			return;
+		}
+		cout << p->m_data << "\t";
+		q.push(p->Left);
+		q.push(p->Right);
+	}
+}
+
+void printLevels(Node *root, int height)
+{
+	if (height == 0||root==NULL)
+	{
+		return;
+	}
+	if (height == 1)
+	{
+		cout << root->m_data << "\t";
+	}
+	printLevels(root->Left,height-1);
+	printLevels(root->Right, height - 1);
+
+}
+void printLeaves(Node *root)
+{
+	if (root == NULL)
+		return;
+	if (root->Left == NULL && root->Right==NULL)
+	{
+		cout << root->m_data << "\t";
+	}
+	printLeaves(root->Left);
+	printLeaves(root->Right);
 }
 
 void levelOrderTraversal(Node *root)
@@ -96,41 +173,118 @@ void levelOrderTraversal1(Node *root)
 	queue <Node*> q;
 	q.push(root);
 	q.push(NULL);
+	//int l = 1;
 	while (!q.empty())
 	{
 		d = q.front();
-		q.pop();
-		if (d == NULL && q.front() == NULL)
-		{
-			break;
-		}
+		q.pop();		
 		if (d == NULL)
 		{
 			cout << endl;
 			q.push(NULL);
+			//l = 0;
 
 		}
-		//q.push(NULL);// need to handle
-		if(d)
+		if (d == NULL && q.front() == NULL)
+		{
+			break;
+		}
+		if(d )//&& l==1)
 		cout << d->m_data << "\t";
 
 		if(d && d->Left)
 		q.push(d->Left);
 
-		if(d && d->Right)
+		if (d && d->Right)
 		q.push(d->Right);
-		
+		//l += 1;
 	}
 }
+
 void leftView(Node *root)
+{
+	queue <Node *> q;
+	Node *p;
+	q.push(root);
+	q.push(NULL);//for root, mark the end of level for first node i.e. root
+	int l = 1;
+	while (!q.empty())
+	{
+		p = q.front();
+		q.pop();
+		if (p == NULL)
+		{
+			//cout << "\n"; it is not require as this method is only meant to print the left view nodes not all nodes at each level
+			q.push(NULL);//to mark the change in level
+			l = 0;
+			//continue;
+		}
+		if (p == NULL && q.front() == NULL)// the break condition
+		{
+			break;
+		}
+		if (l == 1 && p)
+		{
+			cout << p->m_data << "\t";
+		}
+		if(p && p->Left) //be careful about the order of the statement as if u check p->left first and if p is null then it will break
+		q.push(p->Left);
+
+		if(p && p->Right)
+		q.push(p->Right);
+		l++; //this will count of the level and if its 1 then p is pointing to the first node of each level
+	}
+
+}
+
+void leftViewRec(Node *root)
 {
 	if (root == NULL)
 	{
 		return;
 	}
-	cout << root->m_data<<"\t";
-	leftView(root->Left);
-	
+	int max = 0;
+	printLeftview(root, 1, &max);
+}
+
+void printLeftview(Node *root, int level, int *max)
+{
+	if (level == 0 || root==NULL)
+	{
+		return;
+	}
+	if (*max<level)
+	{
+		cout << root->m_data << "\t";
+		*max = level;
+	}
+	printLeftview(root->Left, level + 1, max);
+	printLeftview(root->Right, level + 1, max);
+}
+
+void RightViewRec(Node *root)
+{
+	if (root == NULL)
+	{
+		return;
+	}
+	int max = 0;
+	printRightview(root, 1, &max);
+}
+
+void printRightview(Node *root, int level, int *max)
+{
+	if (level == 0 || root == NULL)
+	{
+		return;
+	}
+	if (*max<level)
+	{
+		cout << root->m_data << "\t";
+		*max = level;
+	}
+	printLeftview(root->Right, level + 1, max);
+	printLeftview(root->Left, level + 1, max);
 }
 
 int diameter(Node *root)

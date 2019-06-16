@@ -1,4 +1,5 @@
 ﻿  tree.cpp
 c:\users\deep\documents\code\tree\tree\tree.cpp(14): warning C4091: 'typedef ': ignored on left of 'Node' when no variable is declared
+c:\users\deep\documents\code\tree\tree\tree.cpp(51): warning C4101: 'root2': unreferenced local variable
   tree.vcxproj -> C:\Users\deep\Documents\code\Tree\Debug\tree.exe
   tree.vcxproj -> C:\Users\deep\Documents\code\Tree\Debug\tree.pdb (Full PDB)
